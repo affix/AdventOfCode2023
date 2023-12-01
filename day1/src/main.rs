@@ -67,6 +67,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
     use super::*;
 
     #[test]
@@ -79,11 +80,15 @@ mod tests {
         lines.insert("treb7uchet", 77);
         
 
-
+        let mut values = Vec::<i32>::new();
         for (line, expected) in lines {
             let actual = calibrate_line_part1(line);
             assert_eq!(expected, actual);
+            values.push(actual);
         }
+
+        let sum = values.iter().sum::<i32>();
+        assert_eq!(sum, 142);
     }
 
     #[test]
