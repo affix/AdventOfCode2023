@@ -1,7 +1,3 @@
-use std::{collections::HashMap};
-use lazy_static::lazy_static;
-use regex::Regex;
-
 fn calibrate_line_part1(line: &str) -> i32 {
      let digits: Vec<i32> = line.chars()
         .filter_map(|c| c.to_digit(10))
