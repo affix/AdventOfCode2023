@@ -11,24 +11,6 @@ fn calibrate_line_part1(line: &str) -> i32 {
     return value;
 }
 
-lazy_static! {
-    static ref NUMBER_WORDS: HashMap<&'static str, i32> = {
-        let mut m = HashMap::new();
-        m.insert("zero", 0);
-        m.insert("one", 1);
-        m.insert("two", 2);
-        m.insert("three", 3);
-        m.insert("four", 4);
-        m.insert("five", 5);
-        m.insert("six", 6);
-        m.insert("seven", 7);
-        m.insert("eight", 8);
-        m.insert("nine", 9);
-        m
-    };
-    static ref RE: Regex = Regex::new(r"(\d|zero|one|two|three|four|five|six|seven|eight|nine)").unwrap();
-}
-
 fn str_to_char(val: &str) -> Option<char> {
     if val.starts_with("one") || val.starts_with('1') {
         Some('1')
