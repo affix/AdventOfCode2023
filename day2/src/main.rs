@@ -37,6 +37,31 @@ fn validate_game(game: &str) -> bool {
     true
 }
 
+fn minimum_cubes_per_round(game: &str) -> [i32; 3] {
+    let game = game.split(":").collect::<Vec<&str>>();
+    let game_parts = game[1].split(";").collect::<Vec<&str>>();
+    let mut red: Vec<i32> = Vec::new();
+    let mut blue: Vec<i32> = Vec::new();
+    let mut green: Vec<i32> = Vec::new();
+
+    for part in game_parts {
+        let parsed = parse_game(part);
+        red.push(parsed[0]);
+        blue.push(parsed[1]);
+        green.push(parsed[2]); 
+    }
+
+    let red_max = *red.iter().max().unwrap();
+    let blue_max = *blue.iter().max().unwrap();
+    let green_max = *green.iter().max().unwrap();
+
+    return [red_max, blue_max, green_max];
+}
+
+fn calculate_power_of_cubes(cubes: [i32; 3]) -> i32 {
+    return cubes.iter().fold(1, |acc, &x| acc * x);
+}
+
 fn main() {
     let games = include_str!("../input").lines();
     let mut part1_value = 0;
@@ -47,6 +72,15 @@ fn main() {
         }
     }
     println!("Valid games: {}", part1_value);
+
+    let games = include_str!("../input").lines();
+    let mut part2_value = 0;
+    for game in games {
+        let min = minimum_cubes_per_round(game);
+        let power = calculate_power_of_cubes(min);
+        part2_value += power;
+    }
+    println!("Power of cubes: {}", part2_value);
 }
 
 
@@ -69,6 +103,23 @@ mod tests {
             let game = value.keys().next().unwrap();
             let expected = value.values().next().unwrap();
             assert_eq!(validate_game(game), *expected);
+        }
+    }
+
+    #[test]
+    fn test_day2_part2_sums() {
+        let mut games = HashMap::new();
+        games.insert(1, HashMap::from([("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green", 48)]));
+        games.insert(2, HashMap::from([("Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue", 12)]));
+        games.insert(3, HashMap::from([("Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red", 1560)]));
+        games.insert(4, HashMap::from([("Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red", 630)]));
+        games.insert(5, HashMap::from([("Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green", 36)]));
+
+        for (_, value) in games {
+            let min = minimum_cubes_per_round(value.keys().next().unwrap());
+            let expected = value.values().next().unwrap();
+            let power = calculate_power_of_cubes(min);
+            assert_eq!(power, *expected);
         }
 
     }
